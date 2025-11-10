@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte para {{ n_features }} Features</title>
+    <style>
+        /* --- Paleta de Colores Neón --- */
+        :root {
+            --neon-blue: #0ff0fc;
+            --neon-pink: #ff00ff;
+            --neon-green: #39ff14;
+            --neon-purple: #bf00ff;
+            --dark-bg: #0a0a0a;
+            --dark-card: #1a1a1a;
+            --text-color: #f0f0f0;
+            --text-color-secondary: #ccc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(255, 0, 255, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(0, 255, 255, 0.05) 0%, transparent 20%);
+        }
+
+        /* --- Encabezado --- */
+        header {
+            background-color: var(--dark-card);
+            color: white;
+            padding: 20px 40px;
+            border-bottom: 2px solid var(--neon-blue);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+        }
+
+        header a {
+            color: var(--neon-blue);
+            text-decoration: none;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+
+        header a:hover {
+            color: white;
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        /* --- Contenedor Principal (Una sola columna) --- */
+        .container {
+            display: block;
+            max-width: 900px; /* Ancho máximo para legibilidad */
+            margin: 30px auto; /* Centra el contenedor */
+            padding: 0 15px;
+        }
+
+        /* --- Estilo de Tarjeta Universal --- */
+        .card {
+            background-color: var(--dark-card);
+            padding: 25px 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px; /* Espacio entre tarjetas */
+        }
+
+        /* --- Tipografía --- */
+        h1 {
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px var(--neon-blue);
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            color: var(--neon-pink);
+            text-shadow: 0 0 8px var(--neon-pink);
+            border-bottom: 2px solid var(--neon-pink);
+            padding-bottom: 5px;
+            margin-top: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            color: var(--neon-green);
+            text-shadow: 0 0 5px var(--neon-green);
+            margin-bottom: 1rem;
+        }
+        
+        p {
+            color: var(--text-color-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        /* --- Imágenes y Gráficos --- */
+        img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.03);
+            display: block; /* Asegura que la imagen no tenga espacio extra */
+            margin: 0 auto;  /* Centra la imagen si es más pequeña que la tarjeta */
+        }
+
+        /* --- Lista de Métricas --- */
+        .metrics {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .metrics li {
+            background: rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 1.1em;
+            color: var(--text-color);
+            font-family: monospace;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/">&larr; Volver al inicio</a>
+    </header>
+
+    <div class="container">
+        
+        <div class="card">
+            <h1>Reporte para {{ n_features }} Datos</h1>
+    
+            <h2>Métricas de Rendimiento (F1-Score)</h2>
+            <ul class="metrics">
+                <li>Modelo Base (79 features): <strong>{{ f1_score_base_pct }}</strong></li>
+                <li>Modelo Reducido ({{ n_features }} features): <strong>{{ f1_score_reduced_pct }}</strong></li>
+                
+                <li style="font-weight: bold; color: {% if f1_score_difference < 0 %}var(--neon-pink){% else %}var(--neon-green){% endif %};">
+                    Diferencia: <strong>{{ f1_score_difference_pct }}</strong>
+                </li>
+            </ul>
+    
+            <h2>Matriz de Confusión (Única para {{ n_features }} features)</h2>
+            <p>Esta matriz muestra las predicciones del modelo (eje X) contra los valores reales (eje Y).</p>
+            <img src="{{ confusion_matrix_image_url }}" alt="Matriz de Confusión">
+        </div>
+    
+        <div class="card">
+             <h2>Análisis Adicional (Gráficos de Ejemplo)</h2>
+            <p>Estos gráficos son ejemplos estáticos generados durante el análisis y son los mismos para todos los reportes.</p>
+        </div>
+
+        {% if arbol_png_url %} 
+        <div class="card">
+            <h3>Árbol de Decisión (Visual)</h3>
+            <p>Un árbol de decisión simple (profundidad 4) entrenado solo con 'min_flowpktl' y 'flow_fin' para ilustrar.</p>
+            <img src="{{ arbol_png_url }}" alt="Árbol de Decisión (plot_tree)">
+        </div>
+        {% endif %}
+        
+        {% if regresion_png_url %}
+        <div class="card">
+            <h3>Predicción vs Real (Regresión)</h3>
+            <p>Un modelo de Regresión (RandomForestRegressor) intentando predecir 'min_flowpktl' usando las otras features.</p>
+            <img src="{{ regresion_png_url }}" alt="Gráfico de Regresión">
+        </div>
+        {% endif %}
+
+    </div>
+</body>
+</html>

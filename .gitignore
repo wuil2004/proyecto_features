@@ -1,0 +1,19 @@
+# Entorno Virtual
+venv/
+features/
+
+# Base de datos local (la crearemos en el servidor)
+db.sqlite3
+
+# Archivos de media (los generaremos en el servidor)
+media/
+
+# Archivos de datos (los subiremos manualmente)
+data/
+
+# Cache de Python
+__pycache__/
+*.pyc
+
+# Archivos de VSCode
+.vscode/
