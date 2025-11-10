@@ -4,6 +4,7 @@ cycler==0.12.1
 Django==5.2.8
 fonttools==4.60.1
 graphviz==0.21
+gunicorn==23.0.0
 joblib==1.5.2
 kiwisolver==1.4.9
 matplotlib==3.10.7
@@ -20,3 +21,4 @@ six==1.17.0
 sqlparse==0.5.3
 threadpoolctl==3.6.0
 tzdata==2025.2
+whitenoise==6.11.0
